@@ -28,10 +28,19 @@ public class ControladorUsuario {
     public Usuario asignarRolaUsuario(@PathVariable String id, @PathVariable String id_rol){
         Usuario usuarioActual = this.miRepositorioUsuario
                 .findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElse(null);
+
+        if(usuarioActual == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario buscado no existe");
+        }
+
         Rol rolActual = this.miRepositorioRol
                 .findById(id_rol)
-                .orElseThrow(RuntimeException::new);
+                .orElse(null);
+
+        if(rolActual == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol solicitado no existe");
+        }
         usuarioActual.setIdRol(rolActual);
         return this.miRepositorioUsuario.save(usuarioActual);
     }
@@ -75,7 +84,7 @@ public class ControladorUsuario {
             return this.miRepositorioUsuario.save(usuarioActual);
         }
         else{
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario ingresado es incorrecto");
         }
     }
 

@@ -1,5 +1,6 @@
 package seguridad.projectP.security.Controladores;
 
+import org.springframework.web.server.ResponseStatusException;
 import seguridad.projectP.security.Modelos.Rol;
 import seguridad.projectP.security.Repositorios.RolRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,18 @@ public class ControladorRol {
         return this.miRepositorioRol.save(infoRol);
     }
 
-    @GetMapping("{_id}")
+    @GetMapping("{id}")
     public Rol show(@PathVariable String id){
         Rol rolActual = this.miRepositorioRol
                 .findById(id)
                 .orElse(null);
+        if(rolActual==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol solicitado no existe");
+        }
         return rolActual;
     }
 
-    @PutMapping("{_id}")
+    @PutMapping("{id}")
     public Rol update(@PathVariable String id, @RequestBody Rol infoRol){
         Rol rolActual = this.miRepositorioRol
                 .findById(id)
@@ -46,18 +50,20 @@ public class ControladorRol {
             return this.miRepositorioRol.save(rolActual);
         }
         else{
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol solicitado no existe");
         }
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{_id}")
+    @DeleteMapping("{id}")
     public void delete(@PathVariable String id){
         Rol rolActual = this.miRepositorioRol
                 .findById(id)
                 .orElse(null);
         if(rolActual != null){
             this.miRepositorioRol.delete(rolActual);
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol solicitado no existe");
         }
     }
 }

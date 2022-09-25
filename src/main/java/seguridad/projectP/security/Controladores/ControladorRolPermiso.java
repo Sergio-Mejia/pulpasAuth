@@ -1,5 +1,6 @@
 package seguridad.projectP.security.Controladores;
 
+import org.springframework.web.server.ResponseStatusException;
 import seguridad.projectP.security.Modelos.Permiso;
 import seguridad.projectP.security.Modelos.Rol;
 import seguridad.projectP.security.Modelos.RolPermiso;
@@ -44,15 +45,18 @@ public class ControladorRolPermiso {
             return this.miRepositorioRolPermiso.save(nuevo);
         }
         else {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol o el permiso solicitado no existe");
         }
     }
 
-    @GetMapping("{_id}")
+    @GetMapping("{id}")
     public RolPermiso show(@PathVariable String id){
         RolPermiso permisoRolActual = this.miRepositorioRolPermiso
                 .findById(id)
                 .orElse(null);
+        if(permisoRolActual == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El id del rol-permiso solicitado no existe");
+        }
         return permisoRolActual;
     }
 
@@ -69,18 +73,21 @@ public class ControladorRolPermiso {
             permisosRolesActual.setId_rol(elRol);
             return this.miRepositorioRolPermiso.save(permisosRolesActual);
         }else{
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol-permiso solicitado no existe");
         }
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{_id}")
+    @DeleteMapping("{id}")
     public void delete(@PathVariable String id){
         RolPermiso permisoRolActual = this.miRepositorioRolPermiso
                 .findById(id)
                 .orElse(null);
         if(permisoRolActual != null){
             this.miRepositorioRolPermiso.delete(permisoRolActual);
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El RolPermiso buscado no existe");
         }
     }
 }
