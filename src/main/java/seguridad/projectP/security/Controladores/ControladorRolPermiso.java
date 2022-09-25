@@ -90,4 +90,20 @@ public class ControladorRolPermiso {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El RolPermiso buscado no existe");
         }
     }
+
+
+        @GetMapping("validar-permiso/rol/{id_rol}")
+    public RolPermiso getPermiso(@PathVariable String id_rol,@RequestBody
+    Permiso infoPermiso){
+        Permiso elPermiso=this.miRepositorioPermiso
+                .getPermiso(infoPermiso.getUrl(),
+                        infoPermiso.getMetodo());
+        Rol elRol=this.miRepositorioRol.findById(id_rol).get();
+        if (elPermiso!=null && elRol!=null){
+            return
+                    this.miRepositorioRolPermiso.getPermisoRol(elRol.get_id(),elPermiso.get_id());
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Los datos del permiso no coinciden");
+        }
+    }
 }
