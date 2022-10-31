@@ -37,11 +37,11 @@ public class ControladorRolPermiso {
         RolPermiso nuevo = new RolPermiso();
         Rol elRol = this.miRepositorioRol.findById(id_rol).get();
         Permiso elPermiso = this.miRepositorioPermiso.findById(id_permiso).get();
-
+        System.out.println("Antes del if");
         if(elRol != null && elPermiso != null){
             nuevo.setId_rol(elRol);
             nuevo.setId_permiso(elPermiso);
-
+            System.out.println("Entro a if");
             return this.miRepositorioRolPermiso.save(nuevo);
         }
         else {
@@ -93,8 +93,7 @@ public class ControladorRolPermiso {
 
 
         @GetMapping("validar-permiso/rol/{id_rol}")
-    public RolPermiso getPermiso(@PathVariable String id_rol,@RequestBody
-    Permiso infoPermiso){
+    public RolPermiso getPermiso(@PathVariable String id_rol, @RequestBody Permiso infoPermiso){
         Permiso elPermiso=this.miRepositorioPermiso
                 .getPermiso(infoPermiso.getUrl(),
                         infoPermiso.getMetodo());

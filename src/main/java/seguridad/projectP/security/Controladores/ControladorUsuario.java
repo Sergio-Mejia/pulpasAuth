@@ -55,9 +55,16 @@ public class ControladorUsuario {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Usuario create(@RequestBody Usuario infoUsuario){
-        infoUsuario.setPassword(convertirSHA256(infoUsuario.getPassword()));
 
-        return this.miRepositorioUsuario.save(infoUsuario);
+        Usuario user =miRepositorioUsuario.getUserById(infoUsuario.getCedula());
+        if(user!=null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El usuario ingresado ya está registrado");
+        }else{
+            Rol rolcliente = miRepositorioRol.getRolbyNombre("cliente");
+            infoUsuario.setIdRol(rolcliente);
+            infoUsuario.setPassword(convertirSHA256(infoUsuario.getPassword()));
+            return this.miRepositorioUsuario.save(infoUsuario);
+        }
     }
 
     @GetMapping("{cedula}")
@@ -124,8 +131,7 @@ public class ControladorUsuario {
                             final HttpServletResponse response) throws IOException {
         Usuario usuarioActual=this.miRepositorioUsuario
                 .getUserByEmail(infoUsuario.getUser());
-        System.out.println(usuarioActual.getUser());
-        System.out.println(convertirSHA256(usuarioActual.getPassword()));
+
         if (usuarioActual!=null && usuarioActual.getPassword().equals(convertirSHA256(infoUsuario.getPassword()))) {
             usuarioActual.setPassword("");
             return usuarioActual;
