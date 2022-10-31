@@ -12,13 +12,21 @@ public class Usuario {
     private String cedula;
     private String user;
     private String password;
+    private String nombres;
+    private String apellidos;
+    private String ciudad;
+    private String direccion;
     @DBRef
     private Rol idRol;
 
-    public Usuario(String cedula, String user, String password) {
+    public Usuario(String cedula, String user, String password, String nombres, String apellidos, String ciudad, String direccion) {
         this.cedula = cedula;
         this.user = user;
         this.password = password;
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.ciudad = ciudad;
+        this.direccion = direccion;
     }
 
     public String getCedula() {
@@ -35,6 +43,38 @@ public class Usuario {
 
     public Rol getIdRol() {
         return idRol;
+    }
+
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public void setUser(String user) {

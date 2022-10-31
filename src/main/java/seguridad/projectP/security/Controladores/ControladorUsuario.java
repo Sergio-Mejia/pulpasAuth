@@ -56,7 +56,7 @@ public class ControladorUsuario {
     @PostMapping
     public Usuario create(@RequestBody Usuario infoUsuario){
 
-        Usuario user =miRepositorioUsuario.getUserById(infoUsuario.getCedula());
+        Usuario user = miRepositorioUsuario.getUserById(infoUsuario.getCedula());
         if(user!=null){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "El usuario ingresado ya está registrado");
         }else{
@@ -88,6 +88,10 @@ public class ControladorUsuario {
         if(usuarioActual != null){
             usuarioActual.setUser(infoUsuario.getUser());
             usuarioActual.setPassword( convertirSHA256(infoUsuario.getPassword()));
+            usuarioActual.setNombres(infoUsuario.getNombres());
+            usuarioActual.setApellidos(infoUsuario.getApellidos());
+            usuarioActual.setCiudad(infoUsuario.getCiudad());
+            usuarioActual.setDireccion(infoUsuario.getDireccion());
             usuarioActual.setIdRol(infoUsuario.getIdRol());
 
             return this.miRepositorioUsuario.save(usuarioActual);
